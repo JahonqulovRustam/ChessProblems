@@ -1,0 +1,18 @@
+class Position {
+	
+	private int row;
+	private int col;
+	
+	public Position(String position) {
+		row = 8 - (position.charAt(1) - '0');
+		col = position.toLowerCase().charAt(0) - 'a';
+	}
+	
+	public int getRow() {
+		return row;
+	}
+	
+	public int getColumn() {
+		return col;
+	}
+}
