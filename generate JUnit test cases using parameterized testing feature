@@ -1,0 +1,43 @@
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ChessCheckDetectorTest {
+	
+	private final ChessCheckDetector detector = new ChessCheckDetector();
+	
+	@ParameterizedTest
+	@CsvSource({
+			"e4, h8, e4, false",
+			"e4, e4, h8, false",
+			"a1, e4, f4, false",
+			"a1, e4, e5, false",
+			"a1, e4, f5, false",
+			"c2, h8, f5, true"
+	})
+	
+	void testIsValid(String whiteQueen, String whiteKing, String blackKing, boolean expected) {
+		
+		assertEquals(
+				expected, detector.isValid(new Position(whiteQueen), new Position(whiteKing), new Position(blackKing))
+		);
+	}
+	
+	
+	@ParameterizedTest
+	@CsvSource({
+			"a4, e4, true",
+			"h5, b5, true",
+			"d8, d4, true",
+			"b7, e4, true",
+			"a4, h4, true",
+			"a1, e4, false",
+			"c2, f6, false"
+	})
+	void testIsBlackKingInCheck(String whiteQueen, String blackKing, boolean expected) {
+		assertEquals(
+				expected, detector.isBlackKingInCheck(new Position(whiteQueen), new Position(blackKing))
+		);
+	}
+}
