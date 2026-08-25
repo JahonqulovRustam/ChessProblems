@@ -1,0 +1,47 @@
+package Chess;
+import Exceptions.InvalidPositionException;
+
+public class Position {
+	
+	private final int row;
+	private final int col;
+	
+	public Position(String position) {
+		if (!validPosition(position)) {
+			throw new InvalidPositionException("Invalid position");
+		} else {
+			row = 8 - (position.charAt(1) - '0');
+			col = Character.toLowerCase(position.charAt(0)) - 'a';
+		}
+	}
+	
+	public int getRow() {
+		return row;
+	}
+	
+	public int getColumn() {
+		return col;
+	}
+	
+	private boolean validPosition(String position) {
+		
+		if (position == null || position.length() != 2) {
+			return false;
+		}
+		
+		char row = position.charAt(1);
+		char column = Character.toLowerCase(position.charAt(0));
+		
+		return column >= 'a' && column <= 'h' &&
+				row >= '1' && row <= '8';
+	}
+	
+	
+	@Override
+	public String toString() {
+		char column = (char) ('a' + getColumn());
+		char row = (char) ('8' - getRow());
+		
+		return "" + column + row;
+	}
+}
