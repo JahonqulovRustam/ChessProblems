@@ -1,0 +1,49 @@
+import java.util.*;
+import Chess.ChessCheckDetector;
+import Chess.Position;
+import Exceptions.InvalidPositionException;
+
+public class Main {
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
+		ChessCheckDetector checkDetector = new ChessCheckDetector();
+		Position posWhiteQueen;
+		Position posWhiteKing;
+		Position posBlackKing;
+		
+		while (true) {
+			try {
+				System.out.print("Position of whiteQueen: ");
+				posWhiteQueen = new Position(sc.next());
+				System.out.print("Position of whiteKing: ");
+				posWhiteKing = new Position(sc.next());
+				System.out.print("Position of blackKing: ");
+				posBlackKing = new Position(sc.next());
+				
+				break;
+				
+			} catch (InvalidPositionException e) {
+				
+				System.out.println("Invalid position! Please enter a valid chess position.");
+			}
+		}
+		
+		if (checkDetector.isValid(posWhiteQueen, posWhiteKing, posBlackKing)) {
+			
+			boolean result = checkDetector.isBlackKingInCheck(posWhiteQueen, posWhiteKing, posBlackKing);
+			
+			System.out.println(result);
+		} else {
+			
+			System.out.println("Illegal chess position");
+		}
+		
+		Position res = checkDetector.canEscape(posWhiteQueen, posWhiteKing, posBlackKing, checkDetector.canMove(posWhiteQueen, posBlackKing));
+		if (res != null) {
+			System.out.println(res);
+		} else {
+			System.out.println("Checkmate!");
+		}
+	}
+}
