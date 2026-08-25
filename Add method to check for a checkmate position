@@ -1,0 +1,109 @@
+
+package Chess;
+import java.util.*;
+
+
+public class ChessCheckDetector {
+	
+	public boolean isValid(Position whiteQueen, Position whiteKing,Position blackKing) {
+		
+		boolean isSameCell = (whiteQueen.getRow() == blackKing.getRow() && whiteQueen.getColumn() == blackKing.getColumn()) ||
+				(whiteKing.getRow() == blackKing.getRow() && whiteKing.getColumn() == blackKing.getColumn()) ||
+				(whiteQueen.getRow() == whiteKing.getRow() && whiteQueen.getColumn() == whiteKing.getColumn());
+		
+		boolean isAdjacent = Math.abs(whiteKing.getRow() - blackKing.getRow()) <= 1 &&
+				Math.abs(whiteKing.getColumn() - blackKing.getColumn()) <= 1;
+		
+		return !(isSameCell || isAdjacent);
+	}
+	
+	public boolean isWhiteKingBetweenWhiteQueenAndBlackKing(Position whiteQueen, Position whiteKing, Position blackKing) {
+		boolean isStraightLine = false;
+		boolean isInBoundaries = false;
+		boolean isSameRow = false;
+		boolean isSameColumn = false;
+		
+		if (isValid(whiteQueen, whiteKing, blackKing)) {
+
+			int x1 = whiteQueen.getRow();
+			int y1 = whiteQueen.getColumn();
+			
+			int x2 = blackKing.getRow();
+			int y2 = blackKing.getColumn();
+			
+			int x3 = whiteKing.getRow();
+			int y3 = whiteKing.getColumn();
+			
+			isStraightLine = (x3 - x1) * (y2 - y1) == (y3 - y1) * (x2 - x1);
+			
+			isInBoundaries = Math.min(x1, x2) <= x3 && x3 <= Math.max(x1, x2) &&
+					Math.min(y1, y2) <= y3 && y3 <= Math.max(y1, y2);
+			
+			
+			isSameRow = (x1 == x2 && x2 == x3);
+			isSameColumn = (y1 == y2 && y2 == y3);
+		}
+		
+		return (isSameRow || isSameColumn) && isStraightLine && isInBoundaries;
+	}
+	
+	
+	public boolean isBlackKingInCheck(Position whiteQueen, Position whiteKing, Position blackKing) {
+		
+		return (whiteQueen.getRow() == blackKing.getRow() ||
+				whiteQueen.getColumn() == blackKing.getColumn() ||
+				Math.abs(whiteQueen.getRow() - blackKing.getRow()) == Math.abs(whiteQueen.getColumn() - blackKing.getColumn())) && !isWhiteKingBetweenWhiteQueenAndBlackKing(whiteQueen, whiteKing, blackKing);
+	}
+
+// canMove method returns a list of valid positions that blackKing can move 
+	public List<Position> canMove(Position whiteQueen, Position blackKing) {
+		List<Position> positions = new ArrayList<>();
+		
+		int currentRow = blackKing.getRow();
+		int currentCol = blackKing.getColumn();
+		
+		for (int i = -1; i <= 1; i++) {
+			for (int j = -1; j <= 1; j++) {
+				
+				if (i == 0 && j == 0) {
+					continue;
+				}
+				
+				int newRow = currentRow + i;
+				int newCol = currentCol + j;
+				
+				if (0 <= newRow && newRow <= 7 &&
+						0 <= newCol && newCol <= 7) {
+					
+					char col = (char) ('a' + newCol);
+					char row = (char) ('8' - newRow);
+					
+					String newPosition = col + row + "";
+					Position pos = new Position(newPosition);
+					
+					if (!pos.equals(whiteQueen)) {
+						
+						positions.add(pos);
+					}
+				}
+			}
+		}
+		
+		return positions;
+	}
+	
+	public Position canEscape(Position whiteQueen, Position whiteKing, Position blackKing, List<Position> positions) {
+		
+		if (isBlackKingInCheck(whiteQueen, whiteKing, blackKing)) {
+			
+			for (Position newBlackKingPosition : positions) {
+				
+				if (!isBlackKingInCheck(whiteQueen, whiteKing,newBlackKingPosition)) {
+					return newBlackKingPosition;
+				}
+			}
+		}
+		
+		return null;
+	}
+}
