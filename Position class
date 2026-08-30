@@ -1,47 +1,66 @@
-package Chess;
-import Exceptions.InvalidPositionException;
+package chess;
+import exceptions.InvalidPositionException;
 
-public class Position {
+public class Square {
 	
-	private final int row;
-	private final int col;
+	private final int rank;
+	private final int file;
 	
-	public Position(String position) {
-		if (!validPosition(position)) {
-			throw new InvalidPositionException("Invalid position");
+	public Square(String square) {
+		if (!isValidSquare(square)) {
+			throw new InvalidPositionException("Invalid square: " + square);
 		} else {
-			row = 8 - (position.charAt(1) - '0');
-			col = Character.toLowerCase(position.charAt(0)) - 'a';
+			rank = 8 - (square.charAt(1) - '0');
+			file = Character.toLowerCase(square.charAt(0)) - 'a';
 		}
 	}
 	
-	public int getRow() {
-		return row;
+	public int getRank() {
+		return rank;
 	}
 	
-	public int getColumn() {
-		return col;
+	public int getFile() {
+		return file;
 	}
 	
-	private boolean validPosition(String position) {
+	private boolean isValidSquare(String square) {
 		
-		if (position == null || position.length() != 2) {
+		if (square == null || square.length() != 2) {
 			return false;
 		}
 		
-		char row = position.charAt(1);
-		char column = Character.toLowerCase(position.charAt(0));
+		char rank = square.charAt(1);
+		char file = Character.toLowerCase(square.charAt(0));
 		
-		return column >= 'a' && column <= 'h' &&
-				row >= '1' && row <= '8';
+		return file >= 'a' && file <= 'h' &&
+				rank >= '1' && rank <= '8';
 	}
 	
 	
 	@Override
 	public String toString() {
-		char column = (char) ('a' + getColumn());
-		char row = (char) ('8' - getRow());
+		char column = (char) ('a' + getFile());
+		char row = (char) ('8' - getRank());
 		
 		return "" + column + row;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		
+		if (!(obj instanceof Square)) {
+			return false;
+		}
+		
+		Square other = (Square) obj;
+		
+		return rank == other.rank && file == other.file;
+	}
+	
+	@Override
+	public int hashCode() {
+		
+		return 31 * rank + file;
 	}
 }
