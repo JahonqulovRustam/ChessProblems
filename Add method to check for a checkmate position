@@ -1,38 +1,38 @@
 
-package Chess;
+package chess;
 import java.util.*;
 
 
 public class ChessCheckDetector {
 	
-	public boolean isValid(Position whiteQueen, Position whiteKing,Position blackKing) {
+	public boolean isKingsNotAdjacentAndNoOverlap(Square whiteQueen, Square whiteKing, Square blackKing) {
 		
-		boolean isSameCell = (whiteQueen.getRow() == blackKing.getRow() && whiteQueen.getColumn() == blackKing.getColumn()) ||
-				(whiteKing.getRow() == blackKing.getRow() && whiteKing.getColumn() == blackKing.getColumn()) ||
-				(whiteQueen.getRow() == whiteKing.getRow() && whiteQueen.getColumn() == whiteKing.getColumn());
+		boolean isSameCell = (whiteQueen.getRank() == blackKing.getRank() && whiteQueen.getFile() == blackKing.getFile()) ||
+				(whiteKing.getRank() == blackKing.getRank() && whiteKing.getFile() == blackKing.getFile()) ||
+				(whiteQueen.getRank() == whiteKing.getRank() && whiteQueen.getFile() == whiteKing.getFile());
 		
-		boolean isAdjacent = Math.abs(whiteKing.getRow() - blackKing.getRow()) <= 1 &&
-				Math.abs(whiteKing.getColumn() - blackKing.getColumn()) <= 1;
+		boolean isAdjacent = isSquareAttackedByWhiteKing(whiteKing, blackKing);
 		
 		return !(isSameCell || isAdjacent);
 	}
 	
-	public boolean isWhiteKingBetweenWhiteQueenAndBlackKing(Position whiteQueen, Position whiteKing, Position blackKing) {
+	public boolean isWhiteKingBetweenWhiteQueenAndBlackKing(Square whiteQueen, Square whiteKing, Square blackKing) {
 		boolean isStraightLine = false;
 		boolean isInBoundaries = false;
 		boolean isSameRow = false;
 		boolean isSameColumn = false;
+		boolean isSameDiagonal = false;
 		
-		if (isValid(whiteQueen, whiteKing, blackKing)) {
+		if (isKingsNotAdjacentAndNoOverlap(whiteQueen, whiteKing, blackKing)) {
 
-			int x1 = whiteQueen.getRow();
-			int y1 = whiteQueen.getColumn();
+			int x1 = whiteQueen.getRank();
+			int y1 = whiteQueen.getFile();
 			
-			int x2 = blackKing.getRow();
-			int y2 = blackKing.getColumn();
+			int x2 = blackKing.getRank();
+			int y2 = blackKing.getFile();
 			
-			int x3 = whiteKing.getRow();
-			int y3 = whiteKing.getColumn();
+			int x3 = whiteKing.getRank();
+			int y3 = whiteKing.getFile();
 			
 			isStraightLine = (x3 - x1) * (y2 - y1) == (y3 - y1) * (x2 - x1);
 			
@@ -42,25 +42,41 @@ public class ChessCheckDetector {
 			
 			isSameRow = (x1 == x2 && x2 == x3);
 			isSameColumn = (y1 == y2 && y2 == y3);
+			isSameDiagonal = Math.abs(x1 - x2) == Math.abs(y1 - y2);
 		}
 		
-		return (isSameRow || isSameColumn) && isStraightLine && isInBoundaries;
+		return (isSameRow || isSameColumn || isSameDiagonal) && isStraightLine && isInBoundaries;
 	}
 	
 	
-	public boolean isBlackKingInCheck(Position whiteQueen, Position whiteKing, Position blackKing) {
+	public boolean isBlackKingInCheck(Square whiteQueen, Square whiteKing, Square blackKing) {
 		
-		return (whiteQueen.getRow() == blackKing.getRow() ||
-				whiteQueen.getColumn() == blackKing.getColumn() ||
-				Math.abs(whiteQueen.getRow() - blackKing.getRow()) == Math.abs(whiteQueen.getColumn() - blackKing.getColumn())) && !isWhiteKingBetweenWhiteQueenAndBlackKing(whiteQueen, whiteKing, blackKing);
+		return (whiteQueen.getRank() == blackKing.getRank() ||
+				whiteQueen.getFile() == blackKing.getFile() ||
+				Math.abs(whiteQueen.getRank() - blackKing.getRank()) == Math.abs(whiteQueen.getFile() - blackKing.getFile())) && !isWhiteKingBetweenWhiteQueenAndBlackKing(whiteQueen, whiteKing, blackKing);
 	}
-
-// canMove method returns a list of valid positions that blackKing can move 
-	public List<Position> canMove(Position whiteQueen, Position blackKing) {
-		List<Position> positions = new ArrayList<>();
+	
+	public boolean isSquareAttackedByWhiteKing(Square whiteKing, Square candidate) {
 		
-		int currentRow = blackKing.getRow();
-		int currentCol = blackKing.getColumn();
+		return Math.abs(whiteKing.getRank() - candidate.getRank()) <= 1 && Math.abs(whiteKing.getFile() - candidate.getFile()) <= 1;
+	}
+	
+	public boolean isSquareAttackedByWhiteQueen(Square whiteQueen, Square whiteKing,Square candidate) {
+		
+		boolean blocked = isWhiteKingBetweenWhiteQueenAndBlackKing(whiteQueen, candidate, whiteKing);
+		
+		boolean isSameRank = whiteQueen.getRank() == candidate.getRank();
+		boolean isSameFile = whiteQueen.getFile() == candidate.getFile();
+		boolean isSameDiagonal = Math.abs(whiteQueen.getRank() - candidate.getRank()) == Math.abs(whiteQueen.getFile() - candidate.getFile());
+		
+		return (isSameRank || isSameFile || isSameDiagonal) && !blocked;
+	}
+	
+	public List<Square> canMove(Square whiteQueen, Square whiteKing, Square blackKing) {
+		List<Square> squares = new ArrayList<>();
+		
+		int currentRank = blackKing.getRank();
+		int currentFile = blackKing.getFile();
 		
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
@@ -69,41 +85,53 @@ public class ChessCheckDetector {
 					continue;
 				}
 				
-				int newRow = currentRow + i;
-				int newCol = currentCol + j;
+				int newRank = currentRank + i;
+				int newFile = currentFile + j;
 				
-				if (0 <= newRow && newRow <= 7 &&
-						0 <= newCol && newCol <= 7) {
+				if (0 <= newRank && newRank <= 7 &&
+						0 <= newFile && newFile <= 7) {
 					
-					char col = (char) ('a' + newCol);
-					char row = (char) ('8' - newRow);
+					char file = (char) ('a' + newFile);
+					char rank = (char) ('8' - newRank);
 					
-					String newPosition = col + row + "";
-					Position pos = new Position(newPosition);
+					String newSquare =  "" + file + rank;
+					Square square = new Square(newSquare);
 					
-					if (!pos.equals(whiteQueen)) {
-						
-						positions.add(pos);
+					if (square.equals(whiteQueen) || square.equals(whiteKing)) {
+						continue;
 					}
+					
+					if (isSquareAttackedByWhiteKing(whiteKing, square) || isSquareAttackedByWhiteQueen(whiteQueen, whiteKing, square)) {
+						continue;
+					}
+					
+					squares.add(square);
 				}
 			}
 		}
 		
-		return positions;
+		return squares;
 	}
 	
-	public Position canEscape(Position whiteQueen, Position whiteKing, Position blackKing, List<Position> positions) {
+	public Square canEscape(Square whiteQueen, Square whiteKing, Square blackKing, List<Square> squares) {
 		
 		if (isBlackKingInCheck(whiteQueen, whiteKing, blackKing)) {
 			
-			for (Position newBlackKingPosition : positions) {
+			for (Square newBlackKingSquare : squares) {
 				
-				if (!isBlackKingInCheck(whiteQueen, whiteKing,newBlackKingPosition)) {
-					return newBlackKingPosition;
+				if (!isBlackKingInCheck(whiteQueen, whiteKing, newBlackKingSquare)) {
+					return newBlackKingSquare;
 				}
 			}
 		}
 		
 		return null;
+	}
+	
+	public boolean isBlackKingInMate(Square whiteQueen, Square whiteKing, Square blackKing) {
+		
+		List<Square> legalMoves = canMove(whiteQueen, whiteKing, blackKing);
+		
+		return isBlackKingInCheck(whiteQueen, whiteKing, blackKing) && legalMoves.isEmpty();
 	}
 }
