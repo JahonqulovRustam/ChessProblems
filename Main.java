@@ -3,13 +3,13 @@ import java.util.*;
 
 public class Main {
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+		Scanner scanner= new Scanner(System.in);
 		System.out.print("Position of whiteQueen: ");
-		Position posWhiteQueen = new Position(sc.next());
+		Position posWhiteQueen = new Position(scanner.next());
 		System.out.print("Position of whiteKing: ");
-		Position posWhiteKing = new Position(sc.next());
+		Position posWhiteKing = new Position(scanner.next());
 		System.out.print("Position of blackKing: ");
-		Position posBlackKing = new Position(sc.next());
+		Position posBlackKing = new Position(scanner.next());
 		
 		ChessCheckDetector checkDetector = new ChessCheckDetector();
 		
