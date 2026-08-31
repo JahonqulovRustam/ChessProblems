@@ -22,7 +22,7 @@ public class Square {
 		return file;
 	}
 	
-	private boolean isValidSquare(String square) {
+	public boolean isValidSquare(String square) {
 		
 		if (square == null || square.length() != 2) {
 			return false;
@@ -55,11 +55,5 @@ public class Square {
 		Square other = (Square) obj;
 		
 		return rank == other.rank && file == other.file;
-	}
-	
-	@Override
-	public int hashCode() {
-		
-		return 31 * rank + file;
 	}
 }
