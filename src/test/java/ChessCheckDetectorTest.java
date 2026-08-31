@@ -68,7 +68,7 @@ public class ChessCheckDetectorTest {
 	}
 	
 	@Test
-	public void testCanEscape() {
+	public void testFindEscapeSquare() {
 		
 		Square whiteQueen = new Square("b2");
 		Square blackKing  = new Square("c3");
@@ -79,7 +79,7 @@ public class ChessCheckDetectorTest {
 		assertNotNull(list);
 		assertFalse(list.isEmpty());
 		
-		Square candidate = detector.canEscape(whiteQueen, whiteKing, blackKing, list);
+		Square candidate = detector.findEscapeSquare(whiteQueen, whiteKing, blackKing);
 		
 		assertNotNull(candidate);
 		assertTrue(list.contains(candidate));
@@ -97,7 +97,7 @@ public class ChessCheckDetectorTest {
 		List<Square> legalMoves = detector.canMove(whiteQueen, whiteKing, blackKing);
 		assertFalse(legalMoves.isEmpty());
 		
-		Square candidate = detector.canEscape(whiteQueen, whiteKing, blackKing, legalMoves);
+		Square candidate = detector.findEscapeSquare(whiteQueen, whiteKing, blackKing);
 		assertNull(candidate);
 		
 		assertFalse(detector.isBlackKingInMate(whiteQueen, whiteKing, blackKing));
@@ -113,7 +113,7 @@ public class ChessCheckDetectorTest {
 		
 		assertTrue(list.isEmpty());
 		
-		Square candidate = detector.canEscape(whiteQueen, whiteKing, blackKing, list);
+		Square candidate = detector.findEscapeSquare(whiteQueen, whiteKing, blackKing);
 		
 		assertNull(candidate);
 		

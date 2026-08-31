@@ -27,7 +27,7 @@ public class Main {
 			System.out.println("Illegal chess position");
 		}
 		
-		Square res = checkDetector.canEscape(posWhiteQueen, posWhiteKing, posBlackKing, checkDetector.canMove(posWhiteQueen, posWhiteKing, posBlackKing));
+		Square res = checkDetector.findEscapeSquare(posWhiteQueen, posWhiteKing, posBlackKing);
 		
 		if (res != null) {
 			System.out.println(res.toString());

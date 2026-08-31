@@ -113,7 +113,9 @@ public class ChessCheckDetector {
 		return squares;
 	}
 	
-	public Square canEscape(Square whiteQueen, Square whiteKing, Square blackKing, List<Square> squares) {
+	public Square findEscapeSquare(Square whiteQueen, Square whiteKing, Square blackKing) {
+		
+		List<Square> squares = canMove(whiteQueen, whiteKing, blackKing);
 		
 		if (isBlackKingInCheck(whiteQueen, whiteKing, blackKing)) {
 			
