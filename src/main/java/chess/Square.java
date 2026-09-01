@@ -4,12 +4,13 @@ public class Square {
 	
 	private final int rank;
 	private final int file;
-	
+
+
 	public Square(String square) {
 		if (!isValidSquare(square)) {
 			throw new exceptions.InvalidSquareException("Invalid square: " + square);
 		} else {
-			rank = 8 - (square.charAt(1) - '0');
+			rank = square.charAt(1) - '0';
 			file = Character.toLowerCase(square.charAt(0)) - 'a';
 		}
 	}
@@ -34,13 +35,13 @@ public class Square {
 		return file >= 'a' && file <= 'h' &&
 				rank >= '1' && rank <= '8';
 	}
-	
-	
+
+
 	@Override
 	public String toString() {
 		char column = (char) ('a' + getFile());
-		char row = (char) ('8' - getRank());
-		
+		char row = (char) ('0' + getRank());
+
 		return "" + column + row;
 	}
 	

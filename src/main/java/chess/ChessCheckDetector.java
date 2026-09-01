@@ -88,11 +88,11 @@ public class ChessCheckDetector {
 				int newRank = currentRank + i;
 				int newFile = currentFile + j;
 				
-				if (0 <= newRank && newRank <= 7 &&
+				if (1 <= newRank && newRank <= 8 &&
 						0 <= newFile && newFile <= 7) {
 					
 					char file = (char) ('a' + newFile);
-					char rank = (char) ('8' - newRank);
+					char rank = (char) ('0' + newRank);
 					
 					String newSquare =  "" + file + rank;
 					Square square = new Square(newSquare);

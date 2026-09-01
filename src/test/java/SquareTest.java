@@ -11,10 +11,10 @@ public class SquareTest {
 	@ParameterizedTest
 	@CsvSource({
 			"e4, 4",
-			"a1, 7",
-			"e5, 3",
-			"f5, 3",
-			"c2, 6"
+			"a1, 1",
+			"e5, 5",
+			"f5, 5",
+			"c2, 2"
 	})
 	
 	void testGetRank(String square, int rank) {
