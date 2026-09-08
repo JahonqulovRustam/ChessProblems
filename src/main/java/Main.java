@@ -1,7 +1,8 @@
-import java.util.*;
 import chess.ChessCheckDetector;
 import chess.Square;
 import exceptions.InvalidSquareException;
+
+import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
@@ -9,13 +10,13 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		ChessCheckDetector checkDetector = new ChessCheckDetector();
 		
-		Square posWhiteQueen = readPosition(sc, "whiteQueen");
-		Square posWhiteKing = readPosition(sc, "whiteKing");
-		Square posBlackKing = readPosition(sc, "blackKing");
+		Square whiteQueen = readSquare(sc, "whiteQueen");
+		Square whiteKing = readSquare(sc, "whiteKing");
+		Square blackKing = readSquare(sc, "blackKing");
 		
-		if (checkDetector.isKingsNotAdjacentAndNoOverlap(posWhiteQueen, posWhiteKing, posBlackKing)) {
+		if (checkDetector.isKingsNotAdjacentAndNoOverlap(whiteQueen, whiteKing, blackKing)) {
 			
-			boolean result = checkDetector.isBlackKingInCheck(posWhiteQueen, posWhiteKing, posBlackKing);
+			boolean result = checkDetector.isBlackKingInCheck(whiteQueen, whiteKing, blackKing);
 			
 			if (result) {
 				System.out.println("BlackKing in check!");
@@ -27,23 +28,23 @@ public class Main {
 			System.out.println("Illegal chess position");
 		}
 		
-		Square res = checkDetector.findEscapeSquare(posWhiteQueen, posWhiteKing, posBlackKing);
+		Square res = checkDetector.findEscapeSquare(whiteQueen, whiteKing, blackKing);
 		
 		if (res != null) {
 			System.out.println(res.toString());
 		}
 		
-		if (checkDetector.isBlackKingInMate(posWhiteQueen, posWhiteKing, posBlackKing)) {
+		if (checkDetector.isBlackKingInMate(whiteQueen, whiteKing, blackKing)) {
 			System.out.println("BlackKing in mate");
 		}
 	}
 	
-	public static Square readPosition(Scanner sc, String name) {
+	public static Square readSquare(Scanner sc, String name) {
 		
 		while (true) {
 			
 			try {
-				System.out.print("Position of " + name + " : ");
+				System.out.print("Square of " + name + " : ");
 				
 				return new Square(sc.next());
 			} catch (InvalidSquareException e) {

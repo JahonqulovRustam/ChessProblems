@@ -78,7 +78,4 @@ public class SquareTest {
 				expected, new Square(square1).equals(new Square(square2))
 		);
 	}
-	
-	
-	
 }
