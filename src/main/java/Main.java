@@ -14,28 +14,29 @@ public class Main {
 		Square whiteKing = readSquare(sc, "whiteKing");
 		Square blackKing = readSquare(sc, "blackKing");
 		
-		if (checkDetector.isKingsNotAdjacentAndNoOverlap(whiteQueen, whiteKing, blackKing)) {
+		if (!checkDetector.isKingsNotAdjacentAndNoOverlap(whiteQueen, whiteKing, blackKing)) {
 			
-			boolean result = checkDetector.isBlackKingInCheck(whiteQueen, whiteKing, blackKing);
-			
-			if (result) {
-				System.out.println("BlackKing in check!");
+			System.out.println("Illegal chess position");
+			return;
+		}
+		
+		boolean inCheck = checkDetector.isBlackKingInCheck(whiteQueen, whiteKing, blackKing);
+		Square escapeSquare = checkDetector.findEscapeSquare(whiteQueen, whiteKing, blackKing);
+		
+		if (inCheck) {
+			System.out.println("BlackKing in check!");
+			if (escapeSquare == null) {
+				System.out.println("BlackKing in mate!");
 			} else {
-				System.out.println("BlackKing is not in check!");
+				System.out.println("BlackKing can escape to " + escapeSquare.toString() + " escapeSquare");
 			}
 		} else {
 			
-			System.out.println("Illegal chess position");
-		}
-		
-		Square res = checkDetector.findEscapeSquare(whiteQueen, whiteKing, blackKing);
-		
-		if (res != null) {
-			System.out.println(res.toString());
-		}
-		
-		if (checkDetector.isBlackKingInMate(whiteQueen, whiteKing, blackKing)) {
-			System.out.println("BlackKing in mate");
+			if (escapeSquare == null) {
+				System.out.println("Draw!");
+			} else {
+				System.out.println("BlackKing is not in check!");
+			}
 		}
 	}
 	
