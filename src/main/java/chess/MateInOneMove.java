@@ -3,11 +3,11 @@ package chess;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckmateChecker {
+public class MateInOneMove {
 	
-	private ChessCheckDetector chessCheckDetector;
+	private final ChessCheckDetector chessCheckDetector;
 	
-	public CheckmateChecker(ChessCheckDetector chessCheckDetector) {
+	public MateInOneMove(ChessCheckDetector chessCheckDetector) {
 		this.chessCheckDetector = chessCheckDetector;
 	}
 	
@@ -17,7 +17,7 @@ public class CheckmateChecker {
 				chessCheckDetector.canMove(whiteQueen, whiteKing, blackKing).isEmpty();
 	}
 	
-	public Square canBlackKingInMateWhileWhitePieceMovesOnce(Square whiteQueen, Square whiteKing, Square blackKing) {
+	public Square findNewSquare(Square whiteQueen, Square whiteKing, Square blackKing) {
 		List<Square> reachableSquares = getQueenReachableSquares(whiteQueen, whiteKing, blackKing);
 		
 		for (Square newQueenSquare : reachableSquares) {
@@ -63,7 +63,7 @@ public class CheckmateChecker {
 		return squares;
 	}
 	
-	public String helper(int currentRank, int currentFile) {
+	private String helper(int currentRank, int currentFile) {
 		char file = (char) ('a' + currentFile);
 		char rank = (char) ('0' + currentRank);
 		
