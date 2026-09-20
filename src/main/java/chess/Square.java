@@ -2,8 +2,8 @@ package chess;
 
 public class Square {
 	
-	private final int rank;
-	private final int file;
+	private int rank;
+	private int file;
 
 
 	public Square(String square) {
@@ -14,6 +14,8 @@ public class Square {
 			file = Character.toLowerCase(square.charAt(0)) - 'a';
 		}
 	}
+	
+	public Square() {}
 	
 	public int getRank() {
 		return rank;
@@ -56,5 +58,12 @@ public class Square {
 		Square other = (Square) obj;
 		
 		return rank == other.rank && file == other.file;
+	}
+	
+	public String toSquare(int currentRank, int currentFile) {
+		char file = (char) ('a' + currentFile);
+		char rank = (char) ('0' + currentRank);
+		
+		return "" + file + rank;
 	}
 }

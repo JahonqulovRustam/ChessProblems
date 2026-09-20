@@ -1,5 +1,5 @@
-import chess.MateInOneMove;
 import chess.ChessCheckDetector;
+import chess.MateInOneMove;
 import chess.Square;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,8 +32,8 @@ public class MateInOneMoveTest {
 			"g6, f7, h7, false"
 	})
 	
-	void isBlackKingInPatTest(String whiteQueen, String whiteKing, String blackKing, boolean expected) {
-		assertEquals(expected, mateInOneMove.isBlackKingInPat(new Square(whiteQueen), new Square(whiteKing), new Square(blackKing)));
+	void isStalemateTest(String whiteQueen, String whiteKing, String blackKing, boolean expected) {
+		assertEquals(expected, mateInOneMove.isStalemate(new Square(whiteQueen), new Square(whiteKing), new Square(blackKing)));
 	}
 	
 	

@@ -6,13 +6,14 @@ import java.util.List;
 public class MateInOneMove {
 	
 	private final ChessCheckDetector chessCheckDetector;
+	private Square sq = new Square();
 	
 	public MateInOneMove(ChessCheckDetector chessCheckDetector) {
 		this.chessCheckDetector = chessCheckDetector;
 	}
 	
-	public boolean isBlackKingInPat(Square whiteQueen, Square whiteKing, Square blackKing) {
-	
+	public boolean isStalemate(Square whiteQueen, Square whiteKing, Square blackKing) {
+		
 		return !chessCheckDetector.isBlackKingInCheck(whiteQueen, whiteKing, blackKing) &&
 				chessCheckDetector.canMove(whiteQueen, whiteKing, blackKing).isEmpty();
 	}
@@ -52,7 +53,7 @@ public class MateInOneMove {
 				
 				if (currentRank < 1 || currentRank > 8 || currentFile < 0 || currentFile > 7) break;
 				
-				Square square = new Square(helper(currentRank, currentFile));
+				Square square = new Square(sq.toSquare(currentRank, currentFile));
 				
 				if (square.equals(blackKing) || square.equals(whiteKing)) break;
 				
@@ -61,12 +62,5 @@ public class MateInOneMove {
 		}
 		
 		return squares;
-	}
-	
-	private String helper(int currentRank, int currentFile) {
-		char file = (char) ('a' + currentFile);
-		char rank = (char) ('0' + currentRank);
-		
-		return "" + file + rank;
 	}
 }

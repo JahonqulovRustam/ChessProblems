@@ -33,7 +33,7 @@ public class Main {
 				System.out.println("BlackKing can escape to " + escapeSquare + " escapeSquare");
 			}
 		} else {
-			if(checker.isBlackKingInPat(whiteQueen, whiteKing, blackKing)) {
+			if(checker.isStalemate(whiteQueen, whiteKing, blackKing)) {
 				System.out.println("Pat!");
 			} else {
 				
