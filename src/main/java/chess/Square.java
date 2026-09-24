@@ -58,11 +58,4 @@ public class Square {
 		
 		return rank == other.rank && file == other.file;
 	}
-	
-	public static String toSquare(int currentRank, int currentFile) {
-		char file = (char) ('a' + currentFile);
-		char rank = (char) ('0' + currentRank);
-		
-		return "" + file + rank;
-	}
 }

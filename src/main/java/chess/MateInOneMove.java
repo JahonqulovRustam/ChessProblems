@@ -3,8 +3,6 @@ package chess;
 import java.util.ArrayList;
 import java.util.List;
 
-import static chess.Square.*;
-
 public class MateInOneMove {
 	
 	private final ChessCheckDetector chessCheckDetector;
@@ -54,7 +52,8 @@ public class MateInOneMove {
 				
 				if (currentRank < 1 || currentRank > 8 || currentFile < 0 || currentFile > 7) break;
 				
-				Square square = new Square(toSquare(currentRank, currentFile));
+				String sq = "" + (char) ('a' + currentFile) + (char) ('0' + currentRank);
+				Square square = new Square(sq);
 				
 				if (square.equals(blackKing) || square.equals(whiteKing)) break;
 				
