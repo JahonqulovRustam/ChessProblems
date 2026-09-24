@@ -15,6 +15,7 @@ public class Square {
 		}
 	}
 	
+	
 	public int getRank() {
 		return rank;
 	}
