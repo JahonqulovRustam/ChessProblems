@@ -34,7 +34,7 @@ public class Main {
 			}
 		} else {
 			if(checker.isStalemate(whiteQueen, whiteKing, blackKing)) {
-				System.out.println("Pat!");
+				System.out.println("Stalemate!");
 			} else {
 				
 				Square square = checker.findNewSquare(whiteQueen, whiteKing, blackKing);

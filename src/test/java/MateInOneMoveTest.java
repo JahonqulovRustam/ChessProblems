@@ -53,7 +53,7 @@ public class MateInOneMoveTest {
 		//use stream API
 		assertTrue(
 				actual.containsAll(
-						expected.stream().map(s -> new Square(s)).toList()
+						expected.stream().map(Square::new).toList()
 				)
 		);
 	}
@@ -68,7 +68,6 @@ public class MateInOneMoveTest {
 		List<String> expected = List.of("a2", "b2", "c1", "b1", "d1");
 		
 		assertNotNull(expected);
-		assertFalse(expected.isEmpty());
 		
 		Square candidate = mateInOneMove.findNewSquare(whiteQueen, whiteKing, blackKing);
 		
