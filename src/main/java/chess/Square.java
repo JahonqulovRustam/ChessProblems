@@ -24,7 +24,7 @@ public class Square {
 		return file;
 	}
 	
-	public boolean isValidSquare(String square) {
+	public static boolean isValidSquare(String square) {
 		
 		if (square == null || square.length() != 2) {
 			return false;
