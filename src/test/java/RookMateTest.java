@@ -2,73 +2,53 @@ import chess.Square;
 import org.junit.Test;
 import rookmate.RookMate;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class RookMateTest {
-	private static final RookMate rookMate = new RookMate();
 	@Test
-	public void test() {
-		Square blackKing = new Square("h8");
-		Square whiteKing = new Square("a1");
-		Square rook = new Square("a7");
-		
-		assertFalse(rookMate.isCheckmate(whiteKing, rook, blackKing));
+    public void noMateWhenWKTooFarToBlackKing() {
+		Square whiteKing = new Square("e5");
+		Square blackKing = new Square("e8");
+
+        List<Square> expected = List.of();
+		assertEquals(expected, RookMate.findCheckMatingRookSquares(whiteKing, blackKing));
 	}
-	
+
 	@Test
-	public void newTest() {
-		Square blackKing = new Square("a8");
-		Square whiteKing = new Square("c7");
-		Square rook = new Square("c6");
-		
-		assertFalse(rookMate.isCheckmate(whiteKing, rook, blackKing));
-	}
-	
-	@Test
-	public void test1() {
-		Square blackKing = new Square("a5");
-		Square whiteKing = new Square("c5");
-		Square rook = new Square("a3");
-		
-		assertTrue(rookMate.isCheckmate(whiteKing, rook, blackKing));
-	}
-	
-	@Test
-	public void test2() {
-		Square blackKing = new Square("d8");
-		Square whiteKing = new Square("d4");
-		Square rook = new Square("h8");
-		
-		assertFalse(rookMate.isCheckmate(whiteKing, rook, blackKing));
-	}
-	
-	@Test
-	public void test3() {
-		Square blackKing = new Square("h6");
+    public void horizontalMate() {
 		Square whiteKing = new Square("g6");
-		Square rook = new Square("h3");
-		
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-				rookMate.isCheckmate(whiteKing, rook, blackKing)
-		);
-		
-		assertEquals("Illegal chess rules!", exception.getMessage());
+		Square blackKing = new Square("g8");
+
+        List<Square> expected = List.of(new Square("a8"), new Square("b8"), new Square("c8"), new Square("d8"), new Square("e8"));
+		assertEquals(expected, RookMate.findCheckMatingRookSquares(whiteKing, blackKing));
 	}
-	
-//	@Test
-//	public void test4() {
-//		Square blackKing = new Square("a3");
-//		Square whiteKing = new Square("c3");
-//
-//		List<Square> expected = List.of(
-//				new Square("a1"),
-//				new Square("a2"),
-//				new Square("a4"),
-//				new Square("a5"),
-//				new Square("a6"),
-//				new Square("a7"),
-//				new Square("a8"),
-//				new Square("b3")
-//		);
-//	}
+
+	@Test
+    public void verticalMate() {
+		Square whiteKing = new Square("f5");
+		Square blackKing = new Square("h5");
+
+        List<Square> expected = List.of(new Square("h1"), new Square("h2"), new Square("h3"), new Square("h7"), new Square("h8"));
+		assertEquals(expected, RookMate.findCheckMatingRookSquares(whiteKing, blackKing));
+	}
+
+	@Test
+    public void cornerMate() {
+		Square whiteKing = new Square("a3");
+		Square blackKing = new Square("a1");
+
+        List<Square> expected = List.of(new Square("c1"), new Square("d1"), new Square("e1"), new Square("f1"), new Square("g1"), new Square("h1"));
+		assertEquals(expected, RookMate.findCheckMatingRookSquares(whiteKing, blackKing));
+	}
+
+	@Test
+    public void horizontalMateOnBottom() {
+		Square whiteKing = new Square("b3");
+		Square blackKing = new Square("b1");
+
+        List<Square> expected = List.of(new Square("d1"), new Square("e1"), new Square("f1"), new Square("g1"), new Square("h1"));
+		assertEquals(expected, RookMate.findCheckMatingRookSquares(whiteKing, blackKing));
+	}
 }

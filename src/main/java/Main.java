@@ -74,7 +74,7 @@ public class Main {
 		
 		
 		try {
-			List<Square> result = rookMate.findRookMoves(whiteKing, blackKing);
+			List<Square> result = RookMate.findCheckMatingRookSquares(whiteKing, blackKing);
 			result.forEach(System.out::println);
 		} catch (IllegalArgumentException e) {
 			System.out.println("Ikkita shoh hech qachon yonma yon bo'la olmaydi");

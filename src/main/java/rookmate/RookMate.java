@@ -6,82 +6,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RookMate {
-	
-	public boolean isCheckmate(Square whiteKing, Square rook, Square blackKing) {
-		boolean isBlackKingInCheck = isRookAttacking(rook, whiteKing, blackKing) || isKingAttacking(whiteKing, blackKing);
-		//blackKing in check and no legal move
-		return isBlackKingInCheck && !hasLegalMove(blackKing, whiteKing, rook);
-	}
-	
-	public List<Square> findRookMoves(Square whiteKing, Square blackKing) {
-		
-		List<Square> legalMoves = new ArrayList<>();
-		
-		for (int file = 0; file < 8; file++) {
-			for (int rank = 1; rank <= 8; rank++) {
-				Square rook = new Square("" + (char) ('a' + file) + rank);
-				
-				if (rook.equals(whiteKing) || rook.equals(blackKing)) continue;
-				if (isCheckmate(whiteKing, rook, blackKing)) {
-					legalMoves.add(rook);
+
+	public static List<Square> findCheckMatingRookSquares(Square whiteKing, Square blackKing) {
+		List<Square> squares = new ArrayList<>();
+
+		int whiteKingFile = whiteKing.getFile();
+		int whiteKingRank = whiteKing.getRank();
+		int blackKingFile = blackKing.getFile();
+		int blackKingRank = blackKing.getRank();
+
+		//Two kings can never be adjacent in chess
+		if (Math.max(Math.abs(whiteKingFile - blackKingFile), Math.abs(whiteKingRank - blackKingRank)) <= 1) {
+			return squares;
+		}
+
+		//horizontal mate
+		if ((blackKingRank == 1 || blackKingRank == 8) && whiteKingFile == blackKingFile && Math.abs(whiteKingRank - blackKingRank) == 2) {
+			for (int file = 0; file < 8; file++) {
+				if (file == blackKingFile) continue;
+
+				boolean attackedByBlackKing = Math.abs(file - blackKingFile) <= 1;
+				boolean protectedByWhiteKing = Math.max(Math.abs(file - whiteKingFile), Math.abs(blackKingRank - whiteKingRank)) <= 1;
+				if (!attackedByBlackKing || protectedByWhiteKing) {
+					squares.add(new Square("" + (char) ('a' + file) + blackKingRank));
 				}
 			}
 		}
-		
-		return legalMoves;
-	}
-	
-	private boolean isRookAttacking(Square rook, Square whiteKing, Square target) {
-		if (rook.equals(target)) return false;
 
-		if (rook.getRank() == target.getRank()) {
-			boolean blocked = whiteKing.getRank() == rook.getRank()
-					&& isBetween(whiteKing.getFile(), rook.getFile(), target.getFile());
-			//if rook is blocked by whiteKing, we can consider that rook isn't attacking
-			return !blocked;
+		//vertical mate
+		if ((blackKingFile == 0 || blackKingFile == 7) && whiteKingRank == blackKingRank && Math.abs(whiteKingFile - blackKingFile) == 2) {
+			for (int rank = 1; rank <= 8; rank++) {
+				if (rank == blackKingRank) continue;
+
+				boolean attackedByBlackKing = Math.abs(rank - blackKingRank) <= 1;
+				boolean protectedByWhiteKing = Math.max(Math.abs(blackKingFile - whiteKingFile), Math.abs(rank - whiteKingRank)) <= 1;
+				if (!attackedByBlackKing || protectedByWhiteKing) {
+					squares.add(new Square("" + (char) ('a' + blackKingFile) + rank));
+				}
+			}
 		}
 
-		if (rook.getFile() == target.getFile()) {
-			boolean blocked = whiteKing.getFile() == rook.getFile()
-					&& isBetween(whiteKing.getRank(), rook.getRank(), target.getRank());
-
-			return !blocked;
-		}
-
-		return false;
-	}
-
-	//whiteKing
-	private boolean isKingAttacking(Square whiteKing, Square target) {
-		if (isAdjacent(target, whiteKing)) {
-			throw new IllegalArgumentException("Illegal chess rules!");
-		}
-		
-		if (target.getFile() == whiteKing.getFile()) {
-			return Math.abs(target.getRank() - whiteKing.getRank()) == 2;
-		}
-		
-		if (target.getRank() == whiteKing.getRank()) {
-			return Math.abs(target.getFile() - whiteKing.getFile()) == 2;
-		}
-
-		return false;
-	}
-
-	private boolean hasLegalMove(Square blackKing, Square whiteKing, Square rook) {
-		boolean isAttackedByWhiteKing = isKingAttacking(whiteKing, blackKing);
-		boolean isAttackedByRook = isRookAttacking(rook, whiteKing, blackKing);
-		
-		if (isAttackedByRook && isAttackedByWhiteKing) return false;
-		return isAttackedByRook || isAttackedByWhiteKing;
-	}
-	
-	private boolean isBetween(int x, int a, int b) {
-		return x > Math.min(a, b) && x < Math.max(a, b);
-	}
-	
-	private boolean isAdjacent(Square a, Square b) {
-		return Math.abs(a.getRank() - b.getRank()) <= 1
-				&& Math.abs(a.getFile() - b.getFile()) <= 1;
+		return squares;
 	}
 }

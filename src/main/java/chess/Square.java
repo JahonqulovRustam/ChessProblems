@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.Objects;
+
 public class Square {
 	
 	private final int rank;
@@ -57,5 +59,10 @@ public class Square {
 		Square other = (Square) obj;
 		
 		return rank == other.rank && file == other.file;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(rank, file);
 	}
 }
