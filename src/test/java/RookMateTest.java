@@ -73,6 +73,15 @@ public class RookMateTest {
 	}
 
 	@Test
+	public void testDifferentRookCornerCheckmate() {
+		Square whiteKing = new Square("c2");
+		Square blackKing = new Square("a1");
+
+		List<Square> expected = List.of(new Square("a3"), new Square("a4"), new Square("a5"), new Square("a6"), new Square("a7"), new Square("a8"));
+		assertEquals(expected, RookMate.findCheckMatingRookSquares(whiteKing, blackKing));
+	}
+
+	@Test
     public void horizontalMateOnBottom() {
 		Square whiteKing = new Square("b3");
 		Square blackKing = new Square("b1");
