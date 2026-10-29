@@ -2,32 +2,36 @@ package rookmate;
 
 import chess.Square;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class RookMate {
-
 	public static List<Square> findCheckMatingRookSquares(Square whiteKing, Square blackKing) {
+		HashMap<Square, Square> exceptions = new HashMap<>();
+		exceptions.put(new Square("b3"), new Square("a1"));
+		exceptions.put(new Square("b6"), new Square("h8"));
+		exceptions.put(new Square("g3"), new Square("h1"));
+		exceptions.put(new Square("g6"), new Square("h8"));
+		
 		List<Square> squares = new ArrayList<>();
-
+		
 		int whiteKingFile = whiteKing.getFile();
 		int whiteKingRank = whiteKing.getRank();
 		int blackKingFile = blackKing.getFile();
 		int blackKingRank = blackKing.getRank();
-
+		boolean hasPair = Objects.equals(exceptions.get(whiteKing), blackKing);
+		
 		//Two kings can never be adjacent in chess
 		if (Math.max(Math.abs(whiteKingFile - blackKingFile), Math.abs(whiteKingRank - blackKingRank)) <= 1) {
-			return squares;
+			throw new IllegalArgumentException("Two kings can never be adjacent in chess!");
 		}
 
 		//horizontal mate
-		if ((blackKingRank == 1 || blackKingRank == 8) && whiteKingFile == blackKingFile && Math.abs(whiteKingRank - blackKingRank) == 2) {
+		if ((blackKingRank == 1 || blackKingRank == 8) && ((whiteKingFile == blackKingFile && Math.abs(whiteKingRank - blackKingRank) == 2) || hasPair)) {
 			for (int file = 0; file < 8; file++) {
 				if (file == blackKingFile) continue;
 
 				boolean attackedByBlackKing = Math.abs(file - blackKingFile) <= 1;
-				boolean protectedByWhiteKing = Math.max(Math.abs(file - whiteKingFile), Math.abs(blackKingRank - whiteKingRank)) <= 1;
-				if (!attackedByBlackKing || protectedByWhiteKing) {
+				if (!attackedByBlackKing) {
 					squares.add(new Square("" + (char) ('a' + file) + blackKingRank));
 				}
 			}
@@ -39,8 +43,7 @@ public class RookMate {
 				if (rank == blackKingRank) continue;
 
 				boolean attackedByBlackKing = Math.abs(rank - blackKingRank) <= 1;
-				boolean protectedByWhiteKing = Math.max(Math.abs(blackKingFile - whiteKingFile), Math.abs(rank - whiteKingRank)) <= 1;
-				if (!attackedByBlackKing || protectedByWhiteKing) {
+				if (!attackedByBlackKing) {
 					squares.add(new Square("" + (char) ('a' + blackKingFile) + rank));
 				}
 			}
