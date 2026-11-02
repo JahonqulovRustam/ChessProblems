@@ -1,5 +1,7 @@
 import chess.Square;
 import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import rookmate.RookMate;
 
 import java.util.List;
@@ -7,31 +9,30 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class RookMateTest {
-	@Test
-    public void noMateWhenWKTooFarToBlackKing() {
-		Square whiteKing = new Square("e5");
-		Square blackKing = new Square("e8");
-
-        List<Square> expected = List.of();
-		assertEquals(expected, RookMate.findCheckMatingRookSquares(whiteKing, blackKing));
+	
+	@ParameterizedTest
+	@CsvSource({
+			"e5, e8",
+			"e5, h5",
+			"a3, c1"
+	})
+	
+	public void isNotMateByRook(String whiteKing, String blackKing) {
+		List<Square> expected = RookMate.findCheckMatingRookSquares(new Square(whiteKing), new Square(blackKing));
+		assertTrue(expected.isEmpty());
 	}
 	
-	@Test
-	public void noMateWhenKingsAreApart() {
-		Square whiteKing = new Square("e5");
-		Square blackKing = new Square("h5");
-		
-		List<Square> expected = List.of();
-		assertEquals(expected, RookMate.findCheckMatingRookSquares(whiteKing, blackKing));
-	}
+	@ParameterizedTest
+	@CsvSource({
+			"g2, h1",
+			"a4, b4",
+			"d5, d6",
+			"h8, g7"
+	})
 	
-	@Test
-	public void checkAdjacentKings() {
-		Square whiteKing = new Square("g2");
-		Square blackKing = new Square("h1");
-		
+	public void checkAdjacentKings(String whiteKing, String blackKing) {
 		Exception e = assertThrows(IllegalArgumentException.class, () ->
-				RookMate.findCheckMatingRookSquares(whiteKing, blackKing));
+				RookMate.findCheckMatingRookSquares(new Square(whiteKing), new Square(blackKing)));
 		
 		assertEquals("Two kings can never be adjacent in chess!", e.getMessage());
 	}
@@ -94,8 +95,8 @@ public class RookMateTest {
     public void verticalMateOnTop() {
 		Square whiteKing = new Square("c7");
 		Square blackKing = new Square("a7");
-
-        List<Square> expected = List.of(new Square("a1"), new Square("a2"), new Square("a3"), new Square("a4"), new Square("a5"));
+		
+		List<Square> expected = List.of(new Square("a1"), new Square("a2"), new Square("a3"), new Square("a4"), new Square("a5"));
 		assertEquals(expected, RookMate.findCheckMatingRookSquares(whiteKing, blackKing));
 	}
 }
