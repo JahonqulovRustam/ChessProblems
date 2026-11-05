@@ -17,7 +17,7 @@ public class RookMateTest {
 			"a3, c1"
 	})
 	
-	public void isNotMateByRook(String whiteKing, String blackKing) {
+	public void determineImpossibilityOfCheckmateByRook(String whiteKing, String blackKing) {
 		List<Square> expected = RookMate.findCheckMatingRookSquares(new Square(whiteKing), new Square(blackKing));
 		assertTrue(expected.isEmpty());
 	}
